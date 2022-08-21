@@ -12,7 +12,7 @@ jobs:
       - name: Install all requirement packages
         run: |
           sudo apt-get update
-          sudo apt-get install wget xz-utils
+          sudo apt-get install wget xz-utils debsigs
       - name: Pull Flutter SDK from official website
         run: |
           wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.0.5-stable.tar.xz
@@ -28,6 +28,9 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           fingerprint: ${{ secrets.GPG_FINGERPRINT }}
+      - name: Sign the deb file
+        run: |
+          debsigs --sign=TranqDart -k ${{ secrets.GPG_KEY_ID }} public/flutter_3.0.5-0_amd64.deb
       - name: Publish
         uses: cloudflare/wrangler-action@2.0.0
         with:
