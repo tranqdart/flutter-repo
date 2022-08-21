@@ -14,3 +14,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           email: ${{ secrets.CF_EMAIL }}
+          command: pages publish --project-name=flutter-repo
+          workingDirectory: 'public'
