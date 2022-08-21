@@ -9,6 +9,19 @@ jobs:
     steps:
       - name: Pull code
         uses: actions/checkout@v3
+      - name: Install all requirement packages
+        run: |
+          apt-get update
+          apt-get install wget xz-utils
+      - name: Pull Flutter SDK from official website
+        run: |
+          wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.0.5-stable.tar.xz
+          tar -xf flutter_linux_3.0.5-stable.tar.xz
+      - name: Build deb package
+        run: |
+          dpkg-deb --build debian
+          mv debian.deb flutter_3.0.5-0_amd64.deb
+          mv flutter_3.0.5-0_amd64.deb public
       - name: publish
         uses: cloudflare/wrangler-action@2.0.0
         with:
