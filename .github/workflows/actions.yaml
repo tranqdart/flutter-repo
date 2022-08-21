@@ -12,7 +12,7 @@ jobs:
       - name: publish
         uses: cloudflare/wrangler-action@2.0.0
         with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
+          apiKey: ${{ secrets.CF_API_TOKEN }}
           email: ${{ secrets.CF_EMAIL }}
           command: pages publish --project-name=flutter-repo
           workingDirectory: 'public'
