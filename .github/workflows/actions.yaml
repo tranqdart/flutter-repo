@@ -35,11 +35,13 @@ jobs:
         run: |
           dpkg-scanpackages ./public /dev/null > Release
           dpkg-scanpackages ./public /dev/null | gzip -9c > Packages.gz
-      - name: Setup NodeJS
-        uses: actions/setup-node@v3
+      - name: rsync deployments to Sourceforge
+        uses: burnett01/rsync-deployments@5.2.1
         with:
-          node-version: 16
-      - name: Deploying to surge
-        run: |
-          npm install -g surge
-          surge ./public ${{ secrets.SURGE_DOMAIN }} --token ${{ secrets.SURGE_TOKEN }}
+          switches: -avzr --delete
+          path: public/
+          remote_path: ${{ secrets.SF_PATH }}
+          remote_host: web.sourceforge.net
+          remote_user: ${{ secrets.SF_USERNAME }}
+          remote_key: ${{ secrets.SF_PRIVATE_KEY }}
+          remote_key_pass: ${{ secrets.SF_PASSWORD }}
