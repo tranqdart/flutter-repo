@@ -38,8 +38,9 @@ jobs:
       - name: Deploy to SourceForge
         uses: wangyucode/sftp-upload-action@v1.4.5
         with:
-          host: 'web.sourceforge.net'
+          host: ${{ secrets.SF_HOST }}
           username: ${{ secrets.SF_USERNAME }}
           privateKey: ${{ secrets.SF_PRIVATE_KEY }}
           remoteDir: ${{ secrets.SF_PATH}}
           localDir: 'public'
+          forceUpload: true
