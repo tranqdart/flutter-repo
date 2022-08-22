@@ -35,12 +35,11 @@ jobs:
         run: |
           dpkg-scanpackages ./public /dev/null > Release
           dpkg-scanpackages ./public /dev/null | gzip -9c > Packages.gz
-      - name: rsync deployments to Sourceforge
-        uses: burnett01/rsync-deployments@5.2.1
+      - name: Deploy to SourceForge
+        uses: wangyucode/sftp-upload-action@v1.4.5
         with:
-          switches: -avzr --delete
-          path: public/
-          remote_path: ${{ secrets.SF_PATH }}
-          remote_host: ${{ secrets.SF_HOST }}
-          remote_user: ${{ secrets.SF_USERNAME }}
-          remote_key: ${{ secrets.SF_PRIVATE_KEY }}
+          host: 'web.sourceforge.net'
+          username: ${{ secrets.SF_USERNAME }}
+          privateKey: ${{ secrets.SF_PRIVATE_KEY }}
+          remoteDir: ${{ secrets.SF_PATH}}
+          localDir: 'public'
