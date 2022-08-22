@@ -12,7 +12,7 @@ jobs:
       - name: Install all requirement packages
         run: |
           sudo apt-get update
-          sudo apt-get install wget xz-utils debsigs
+          sudo apt-get install wget xz-utils debsigs dpkg-dev
       - name: Pull Flutter SDK from official website
         run: |
           wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.0.5-stable.tar.xz
@@ -31,10 +31,15 @@ jobs:
       - name: Sign the deb file
         run: |
           debsigs --sign=TranqDart -k ${{ secrets.GPG_KEY_ID }} public/flutter_3.0.5-0_amd64.deb
-      - name: Deploying to surge
+      - name: Generate deb repository
+        run: |
+          dpkg-scanpackages ./public /dev/null > Release
+          dpkg-scanpackages ./public /dev/null | gzip -9c > Packages.gz
+      - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
           node-version: 16
+      - name: Deploying to surge
         run: |
           npm install -g surge
           surge ./public ${{ secrets.SURGE_DOMAIN }} --token ${{ secrets.SURGE_TOKEN }}
