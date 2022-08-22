@@ -31,9 +31,10 @@ jobs:
       - name: Sign the deb file
         run: |
           debsigs --sign=TranqDart -k ${{ secrets.GPG_KEY_ID }} public/flutter_3.0.5-0_amd64.deb
-      - name: Publish
-        uses: cloudflare/wrangler-action@2.0.0
+      - name: Deploying to surge
+        uses: actions/setup-node@v3
         with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: pages publish public --project-name=flutter-repo
+          node-version: 16
+        run: |
+          npm install -g surge
+          surge ./public ${{ secrets.SURGE_DOMAIN }} --token ${{ secrets.SURGE_TOKEN }}
