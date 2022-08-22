@@ -36,11 +36,10 @@ jobs:
           dpkg-scanpackages ./public /dev/null > Release
           dpkg-scanpackages ./public /dev/null | gzip -9c > Packages.gz
       - name: Deploy to SourceForge
-        uses: wangyucode/sftp-upload-action@v1.4.5
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
-          host: ${{ secrets.SF_HOST }}
+          server: ${{ secrets.SF_HOST }}
           username: ${{ secrets.SF_USERNAME }}
-          privateKey: ${{ secrets.SF_PRIVATE_KEY }}
-          remoteDir: ${{ secrets.SF_PATH}}
-          localDir: 'public'
-          forceUpload: true
+          ssh_private_key: ${{ secrets.SF_PRIVATE_KEY }} 
+          local_path: './public/*'
+          remote_path: ${{ secrets.SF_PATH}}
